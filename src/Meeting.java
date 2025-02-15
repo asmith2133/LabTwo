@@ -1,45 +1,62 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public abstract class Meeting extends Event implements Completable {
-    protected String location;
-    protected LocalDateTime endDateTime;
+import java.time.LocalDateTime;
+import java.time.Duration;
 
-    public Meeting(String name, LocalDateTime start, LocalDateTime end, String location) {
+public class Meeting extends Event implements Completable {
+    private LocalDateTime endDateTime;
+    private String location;
+    private boolean complete;
+
+
+    public Meeting(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, String location) {
+        if (endDateTime == null) {
+            throw new IllegalArgumentException("End date time cannot be null");
+        }
         this.name = name;
-        this.dateTime = start;
-        this.dateTime = end;
+        this.dateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.location = location;
+        this.complete = false;
     }
 
-    public void setLocation() {
-        this.location = location;
+
+    @Override
+    public void complete() {
+        this.complete = true;
     }
 
-    public String getLocation() {
-        return location;
+    // Returns true if the meeting is complete
+    @Override
+    public boolean isComplete() {
+        return complete;
     }
 
-    public void setEndTime(LocalDateTime end) {
-        this.endDateTime = end;
-    }
-
+    // Returns the end time of the meeting
     public LocalDateTime getEndTime() {
         return endDateTime;
     }
 
-    @Override
-    public void complete() {
-        boolean complete = true;
+    // Returns the duration of the meeting
+    public Duration getDuration() {
+            return Duration.between(getDateTime(), endDateTime); // Calculates the duration between start and end time
+        }
+
+
+    // Returns the location of the meeting
+    public String getLocation() {
+        return location;
     }
 
-    @Override
-    public boolean isComplete() {
-        return endDateTime.isBefore(LocalDateTime.now());
+    // Sets the end time of the meeting
+    public void setEndTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
-    public Duration getDuration(){
-        return Duration.between(dateTime, endDateTime);
-
+    // Sets the location of the meeting
+    public void setLocation(String location) {
+        this.location = location;
     }
+
 }

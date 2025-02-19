@@ -15,9 +15,12 @@ public class EventListPanel extends JPanel {
 
         // Control Panel
         JPanel controlPanel = new JPanel();
-        sortDropDown = new JComboBox<>(new String[]{"Sort by Name", "Sort by Date"});
+        sortDropDown = new JComboBox<>(new String[]{"Sort by Name", "Sort by Date", "All Events",
+                "Meetings", "Deadlines", "Completed Events", "Incomplete Events"});
         filterDisplay = new JCheckBox("Show Completed Events");
         JButton addEventButton = new JButton("Add Event");
+        JComboBox<String> eventTypeFilter = new JComboBox<>(new String[]{"All Events", "Meetings", "Deadlines"});
+        controlPanel.add(eventTypeFilter);
 
         controlPanel.add(sortDropDown);
         controlPanel.add(filterDisplay);
@@ -66,20 +69,32 @@ public class EventListPanel extends JPanel {
         if (!filterDisplay.isSelected()) {
             // Remove completed events
             events.removeIf(Event::isComplete);
+
         }
         resetDisplay();
     }
 
     //Reset the Panel
     private void resetDisplay() {
-        displayPanel.removeAll();
-        for (Event event : events) {
-            EventPanel eventPanel = new EventPanel(event);
-            displayPanel.add(eventPanel);
-        }
+        displayPanel.removeAll(); // Clear the panel
 
-        revalidate();
-        repaint();
+        String selectedFilter = (String) sortDropDown.getSelectedItem();
+
+        // Sorting for Dropdown Box
+        for (Event event : events) {
+            boolean matchesFilter =
+                    selectedFilter.equals("All Events") ||
+                            (selectedFilter.equals("Meetings") && event instanceof Meeting) ||
+                            (selectedFilter.equals("Deadlines") && event instanceof Deadline) ||
+                            (selectedFilter.equals("Completed Events") && event.isComplete()) ||
+                            (selectedFilter.equals("Incomplete Events") && !event.isComplete());
+
+            if (matchesFilter) {
+                // Add events that match the filter
+                EventPanel eventPanel = new EventPanel(event);
+                displayPanel.add(eventPanel);
+            }
+        }
 
     }
 

@@ -1,12 +1,15 @@
 import java.time.LocalDateTime;
 
-public abstract class Deadline extends Event implements Completable {
-    protected boolean complete;
+public class Deadline extends Event implements Completable {
+    private boolean complete;
 
     protected Deadline(String name, LocalDateTime deadline) {
+        //constructor
         this.name = name;
         this.dateTime = deadline;
+        this.complete = false;
     }
+
 
     @Override
     public boolean isComplete() {

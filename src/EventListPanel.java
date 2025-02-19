@@ -19,8 +19,7 @@ public class EventListPanel extends JPanel {
                 "Meetings", "Deadlines", "Completed Events", "Incomplete Events"});
         filterDisplay = new JCheckBox("Show Completed Events");
         JButton addEventButton = new JButton("Add Event");
-        JComboBox<String> eventTypeFilter = new JComboBox<>(new String[]{"All Events", "Meetings", "Deadlines"});
-        controlPanel.add(eventTypeFilter);
+
 
         controlPanel.add(sortDropDown);
         controlPanel.add(filterDisplay);
